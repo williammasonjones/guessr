@@ -1,4 +1,5 @@
 require "guessr/version"
+require "set"
 require "camping"
 
 Camping.goes :Guessr
@@ -11,6 +12,9 @@ module Guessr
     end
 
     class Hangman < Base
+      validates :answer, presence: true,
+        format: { with: /^[a-z]+$/, message: "only lowercase words allowed"},
+      serialize :guesses
     end
 
     class BasicSchema < V 1.0
