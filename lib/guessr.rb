@@ -13,8 +13,17 @@ module Guessr
 
     class Hangman < Base
       validates :answer, presence: true,
-        format: { with: /^[a-z]+$/, message: "only lowercase words allowed"},
+        format: { with: /^[a-z]+$/, message: "only lowercase words allowed"}
       serialize :guesses
+
+      def finished?
+        self.turns.zero? || self.answer.chars.all? { |l| self.guesses.include?(l) }
+      end
+
+      def guess_letter(letter)
+        self.guesses.add(letter)
+        self.turns -= 1 unless self.answer.include?(letter)
+      end
     end
 
     class BasicSchema < V 1.0
