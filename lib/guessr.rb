@@ -6,6 +6,8 @@ Camping.goes :Guessr
 module Guessr
   module Models
     class Player < Base
+      validates :name, presence: true, uniqueness: true
+      # alternately: validates :name, presence: true
     end
 
     class Hangman < Base
