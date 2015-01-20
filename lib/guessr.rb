@@ -15,6 +15,7 @@ module Guessr
       validates :answer, presence: true,
         format: { with: /^[a-z]+$/, message: "only lowercase words allowed"}
       serialize :guesses
+      before_update :set_finished!
 
       def finished?
         self.turns.zero? || self.answer.chars.all? { |l| self.guesses.include?(l) }
@@ -23,6 +24,11 @@ module Guessr
       def guess_letter(letter)
         self.guesses.add(letter)
         self.turns -= 1 unless self.answer.include?(letter)
+      end
+
+      private
+      def set_finished!
+        self.finished = true if self.finished?
       end
     end
 
