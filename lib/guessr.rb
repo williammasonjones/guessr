@@ -1,4 +1,5 @@
 require "guessr/version"
+require "camping"
 
 Camping.goes :Guessr
 
