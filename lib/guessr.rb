@@ -13,7 +13,7 @@ module Guessr
 
     class Hangman < Base
       validates :answer, presence: true,
-        format: { with: /^[a-z]+$/, message: "only lowercase words allowed"}
+        format: { with: /\A[a-z]+\z/, message: "only lowercase words allowed"}
       serialize :guesses
       before_update :set_finished!
 
@@ -30,6 +30,9 @@ module Guessr
       def set_finished!
         self.finished = true if self.finished?
       end
+    end
+
+    class NumberGuessingGame < Base
     end
 
     class BasicSchema < V 1.0
@@ -51,6 +54,27 @@ module Guessr
       def self.down
         drop_table Player.table_name
         drop_table Hangman.table_name
+      end
+    end
+
+    class BasicSchema < V 1.1
+      def self.up
+        create_table Player.table_name do |t|
+          t.string :name
+          t.timestamps
+        end
+
+        create_table NumberGuessingGame.table_name do |t|
+          t.string :answer
+          t.string :guesses
+          t.boolean :finished
+          t.timestamps
+        end
+      end
+
+      def self.down
+        drop_table Player.table_name
+        drop_table NumberGuessingGame.table_name
       end
     end
   end
